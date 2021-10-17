@@ -1,0 +1,26 @@
+server:
+  port: 8762
+spring:
+  application:
+    name: eureka-slave-server-1
+  security:
+    user:
+      name: mfma1
+      password: 1234567
+
+service:
+  server1: http://mfma:123456@eureka-master-server.com:8761/eureka/
+  server2: http://mfma1:1234567@eureka-slave-server-1.com:8762/eureka/
+  server3: http://mfma2:12345678@eureka-slave-server-2.com:8763/eureka/
+
+eureka:
+  instance:
+    hostname: eureka-slave-server-1
+  client:
+    register-with-eureka: false
+    fetch-registry: false
+    service-url:
+      defaultZone: ${service.server1},${service.server3}
+
+
+
