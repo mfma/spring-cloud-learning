@@ -1,0 +1,30 @@
+
+server:
+  port: 8083
+spring:
+  application:
+    name: SERVICE-PROVIDER
+
+
+service:
+  server1: http://mfma:123456@eureka-master-server.com:8761/eureka/
+  server2: http://mfma1:1234567@eureka-slave-server-1.com:8762/eureka/
+  server3: http://mfma2:12345678@eureka-slave-server-2.com:8763/eureka/
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${service.server1},${service.server2},${service.server3}
+    healthcheck:
+      enabled: true
+
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.application.name}:${spring.cloud.client.ip-address}:${server.port}
+    metadata-map:
+      mfma: test
+
+
+logging:
+  level:
+    com.mfma.serviceprovider1: debug
