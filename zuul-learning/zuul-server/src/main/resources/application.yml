@@ -1,0 +1,38 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: zuul-server
+logging:
+  level:
+    com.mfma.zuulserver: debug
+
+service:
+  server1: http://mfma:123456@eureka-master-server.com:8761/eureka/
+  server2: http://mfma1:1234567@eureka-slave-server-1.com:8762/eureka/
+  server3: http://mfma2:12345678@eureka-slave-server-2.com:8763/eureka/
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${service.server1},${service.server2},${service.server3}
+zuul:
+  routes:
+    service-consumer:
+      path: /test/**
+      url: https://www.163.com/
+  retryable: true
+
+ribbon:
+  connectTimeout: 500
+  readTimeout: 5000
+  maxAutoRetries: 1
+  maxAutoRetriesNextServer: 3
+  okToRetryOnAllOperations: true
+  retryableStatusCodes: 500,404,50
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
