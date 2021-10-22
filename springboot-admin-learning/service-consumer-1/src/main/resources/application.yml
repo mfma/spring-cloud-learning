@@ -1,0 +1,51 @@
+spring:
+  application:
+    name: service-consumer
+  boot:
+      admin:
+        client:
+          auto-deregistration: false
+server:
+  port: 8084
+logging:
+  level:
+    com.mfma.serviceconsumer: debug
+
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_SERVER_LIST:http://mfma:123456@eureka-master-server.com:8761/eureka/,http://mfma1:1234567@eureka-slave-server-1.com:8762/eureka/,http://mfma2:12345678@eureka-slave-2-second.com:8763/eureka/}
+
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.application.name}:${spring.cloud.client.ip-address}:${server.port}
+
+ribbon:
+  eager-load:
+    enabled: true
+    clients: service-provider
+
+#配置自定义的负载策略
+#SERVICE-PROVIDER:
+ # ribbon:
+
+    #NFLoadBalancerRuleClassName: com.mfma.serviceconsumer.rule.MyTestRule
+feign:
+  httpclient:
+    enabled: false
+  okhttp:
+    enabled: true
+  client:
+    default-to-properties: true
+    config:
+      default:
+        loggerLevel: FULL
+  hystrix:
+    enabled: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
