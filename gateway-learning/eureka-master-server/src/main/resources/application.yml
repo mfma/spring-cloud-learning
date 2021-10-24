@@ -1,0 +1,25 @@
+server:
+  port: 8761
+spring:
+  application:
+    name: eureka-master-server
+  security:
+    user:
+      name: mfma
+      password: 123456
+
+service:
+  server1: http://mfma:123456@eureka-master-server.com:8761/eureka/
+  server2: http://mfma1:1234567@eureka-slave-server-1.com:8762/eureka/
+  server3: http://mfma2:12345678@eureka-slave-server-2.com:8763/eureka/
+
+eureka:
+  instance:
+    hostname: eureka-master-server
+  client:
+    #\u7531\u4E8E\u8BE5\u5E94\u7528\u4E3A\u6CE8\u518C\u4E2D\u5FC3, \u6240\u4EE5\u8BBE\u7F6E\u4E3Afalse, \u4EE3\u8868\u4E0D\u5411\u6CE8\u518C\u4E2D\u5FC3\u6CE8\u518C\u81EA\u5DF1
+    register-with-eureka: false
+    # \u7531\u4E8E\u6CE8\u518C\u4E2D\u5FC3\u7684\u804C\u8D23\u5C31\u662F\u7EF4\u62A4\u670D\u52A1\u5B9E\u4F8B, \u5B83\u5E76\u4E0D\u9700\u8981\u53BB\u68C0\u7D22\u670D\u52A1, \u6240\u4EE5\u4E5F\u8BBE\u7F6E\u4E3A false
+    fetch-registry: false
+    service-url:
+      defaultZone: ${service.server2},${service.server3}
