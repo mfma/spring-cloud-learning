@@ -1,0 +1,27 @@
+spring:
+  application:
+    name: hystrix-dashboard
+server:
+  port: 8084
+
+
+hystrix:
+  dashboard:
+    #\u4E0D\u914D\u7F6E\u4F1A\u62A5If it should be allowed add it to hystrix.dashboard.proxyStreamAllowList.
+    proxy-stream-allow-list: "localhost"
+
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_SERVER_LIST:http://mfma:123456@eureka-master-server.com:8761/eureka/,http://mfma1:1234567@eureka-slave-server-1.com:8762/eureka/,http://mfma2:12345678@eureka-slave-2-second.com:8763/eureka/}
+
+#  turbine:
+#    appConfig: hystrix-feign-demo
+#  aggregator: clusterConfig=default
+turbine:
+  app-config: service-consumer
+  aggregator:
+    cluster-config: default
+  cluster-name-expression: new String("default")
+#clusterNameExpression: new String("default")
