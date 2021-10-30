@@ -1,2 +1,2 @@
 # spring-cloud-learning
-Build a basic SpringCloud project framework
+Step by step to build a basic Spring Cloud framework for the development of various distributed projects
