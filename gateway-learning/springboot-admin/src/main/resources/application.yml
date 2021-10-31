@@ -1,0 +1,47 @@
+server:
+  port: 9090
+spring:
+  application:
+    name: springboot-admin
+  mail:
+    host: smtp.sina.com
+    username: flyingtothesun@sina.com
+    password: TOBENUMBERONE
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+  boot:
+    admin:
+      notify:
+        mail:
+          to: flyingtothesun@sina.com
+          from: flyingtothesun@sina.com
+
+service:
+  server1: http://mfma:123456@eureka-master-server.com:8761/eureka/
+  server2: http://mfma1:1234567@eureka-slave-server-1.com:8762/eureka/
+  server3: http://mfma2:12345678@eureka-slave-server-2.com:8763/eureka/
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${service.server1},${service.server2},${service.server3}
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.application.name}:${spring.cloud.client.ip-address}:${server.port}
+    status-page-url: http://${spring.cloud.client.ipAddress}:${server.port}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include=*:
+
+
+logging:
+  level:
+    com.mfma.springbootadmin: debug

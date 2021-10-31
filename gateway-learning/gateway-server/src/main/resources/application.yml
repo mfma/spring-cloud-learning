@@ -1,0 +1,90 @@
+server:
+  port: 9091
+spring:
+  application:
+    name: gateway-server
+
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    database: 0
+    password: 123456
+    jedis:
+      pool:
+        max-active: 8
+        max-wait: -1
+        max-idle: 8
+        min-idle: 0
+    timeout: 0
+
+  cloud:
+    gateway:
+#      globalcors:
+#        cors-configurations:
+#          '[/**]':
+#            allowedOrigins: "*"
+#            allowedHeaders:
+#              - access-control-allow-origin
+#              - content-type
+#              - token
+#            exposedHeaders:
+#              - access-control-allow-origin
+#              - content-type
+#            allowCredentials: true
+#            allowedMethods:
+#              - GET
+#              - OPTIONS
+#              - PUT
+#              - POST
+#              - DELETE
+
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+      routes:
+        - id: service-consumer
+          uri: lb://service-consumer
+          predicates:
+            - Path=/test2
+          filters:
+            - name: FilterTest
+              args:
+                redis-rate-limiter.replenishRate: 1
+                redis-rate-limiter.burstCapacity: 2
+                redis-rate-limiter.requestedTokens: 1
+                key-resolver: "#{@ipLimiter}"
+#            - name: Hystrix
+#              args:
+#                name: fallbackcmd
+#                fallbackUri: forward:/fallback
+#            - name: Retry
+#              args:
+#                retries: 3
+#                series:
+#                 - SERVER_ERROR
+
+#      - id: service-consumer
+#        uri: lb://service-consumer
+#        predicates:
+#          - Path=/test2
+#        filters:
+#          - name: NameValueTest
+#            args:
+#              name: mfma
+#              value: \u7537
+
+service:
+  server1: http://mfma:123456@eureka-master-server.com:8761/eureka/
+  server2: http://mfma1:1234567@eureka-slave-server-1.com:8762/eureka/
+  server3: http://mfma2:12345678@eureka-slave-server-2.com:8763/eureka/
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${service.server1},${service.server2},${service.server3}
+
+logging:
+  level:
+    com.mfma.gatewayserver: debug
+
